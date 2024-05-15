@@ -4,9 +4,8 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         int escolha_menu_principal = -1;
-        Scanner input = new java.util.Scanner(System.in).useLocale(Locale.ENGLISH);
+        Scanner input = new Scanner(System.in);
         Cadastro cadastro = new Cadastro();
-
 
         while (escolha_menu_principal != 0) {
             try {
@@ -23,49 +22,58 @@ public class Main {
                     case 1:
                         Tarefa nova_tarefa = new Tarefa();
                         System.out.println("\nDigite o título da tarefa: ");
-                        nova_tarefa.setTitulo(input.nextLine());
+                        nova_tarefa.setNome(input.nextLine());
                         System.out.println("Digite a descrição da tarefa: ");
                         nova_tarefa.setDescricao(input.nextLine());
                         System.out.println("Digite a data de prazo da tarefa (dd/mm/aa): ");
-                        nova_tarefa.setData(input.nextline());
+                        nova_tarefa.setDataPrazo(input.nextLine());
                         System.out.println("Deseja ativar as notificações (s/n)?");
                         String notif = input.nextLine();
-                        if (notif.equals("s")) nova_tarefa.setNotificacoes(true);
-                        else nova_tarefa.setNotificacoes(false);
+                        nova_tarefa.setNotificacoes(notif.equals("s"));
+                        System.out.println(input.nextLine());
                         cadastro.adicionarTarefa(nova_tarefa);
                         break;
 
                     case 2:
-
-                        // Implementar ainda
-                        int escolha_tarefa = -1, escolha_menu_editar = -1;
+                        int escolha_tarefa = -1;
                         while (escolha_tarefa != 0) {
-                            try{
-                                System.out.println("\nQual tarefa deseja editar/excluir?\n0- Voltar");
-                                cadastro.listarTarefas();
-                                escolha_tarefa = input.nextInt();
+                            System.out.println("\nQual tarefa deseja editar/excluir?\n0- Voltar");
+                            cadastro.listarTarefas();
+                            escolha_tarefa = input.nextInt();
+                            input.nextLine();
+
+                            if (escolha_tarefa != 0) {
+                                System.out.println("1- Editar\n2- Excluir\n0- Voltar");
+                                int escolha_menu_editar = input.nextInt();
                                 input.nextLine();
-
+                                switch (escolha_menu_editar) {
+                                    case 1:
+                                        // Implementar edição
+                                        break;
+                                    case 2:
+                                        // Implementar exclusão
+                                        break;
+                                    default:
+                                        System.out.println("\nEscolha inválida!");
+                                        break;
+                                }
                             }
-                            catch (Exception e2){
-                                System.out.println("\nEntrada invalida!");
-                                input.nextLine();
-                            }
-
-
-
                         }
+                        break;
+
                     case 3:
                         System.out.println("\nLista de tarefas cadastradas: ");
                         cadastro.listarTarefas();
+                        break;
 
                     default:
                         System.out.println("\nEscolha inválida!");
                 }
             } catch (Exception e) {
-                System.out.println("\nEntrada invalida!");
+                System.out.println("\nEntrada inválida!");
                 input.nextLine();
             }
         }
+        input.close(); // Fechar o scanner ao finalizar
     }
 }

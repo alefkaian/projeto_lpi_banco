@@ -1,17 +1,18 @@
-import java.time.LocalDate;
 
 public class Tarefa {
     private int id;
     private String nome;
-    private LocalDate dataPrazo;
+    private String dataPrazo;
     private String descricao;
     private boolean notificacoes;
 
+    public Tarefa(){
+
+    }
+
     // Construtor
-    public Tarefa(int id, String nome, LocalDate dataPrazo, String descricao, boolean notificacoes) {
-        this.id = id;
+    public Tarefa(String nome, String dataPrazo, String descricao, boolean notificacoes) {
         this.nome = nome;
-        this.dataPrazo = dataPrazo;
         this.descricao = descricao;
         this.notificacoes = notificacoes;
     }
@@ -33,11 +34,11 @@ public class Tarefa {
         this.nome = nome;
     }
 
-    public LocalDate getDataPrazo() {
+    public String getDataPrazo() {
         return dataPrazo;
     }
 
-    public void setDataPrazo(LocalDate dataPrazo) {
+    public void setDataPrazo(String dataPrazo) {
         this.dataPrazo = dataPrazo;
     }
 
@@ -57,12 +58,14 @@ public class Tarefa {
         this.notificacoes = notificacoes;
     }
 
-    // Método para imprimir detalhes da tarefa
     @Override
     public String toString() {
-        return "Tarefa[id= " + id + ", nome= " + nome + ", data Prazo= " + dataPrazo + ", descricao= " + descricao + ", notificacoes=" + (notificacoes ? "Sim" : "Não") + ']';
-
+        return "Tarefa{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", dataPrazo='" + dataPrazo + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", notificacoes=" + notificacoes +
+                '}';
     }
-
 }
-
