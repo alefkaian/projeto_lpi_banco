@@ -12,12 +12,12 @@ public class TarefaDAO {
     }
 
     public void adiciona(Tarefa tarefa) {
-        String sql = "INSERT INTO Tarefa(nome, descricao, dataprazo, notificacoes) VALUES(?, ?, ?, ?)";
+        String sql = "INSERT INTO Tarefa(titulo, descricao, dataPrazo, notificacoes) VALUES(?, ?, ?, ?)";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, tarefa.getNome());
-            stmt.setString(2, tarefa.getDataPrazo());
-            stmt.setString(3, tarefa.getDescricao());
+            stmt.setString(1, tarefa.getTitulo());
+            stmt.setString(2, tarefa.getDescricao());
+            stmt.setString(3, tarefa.getDataPrazo());
             stmt.setBoolean(4, tarefa.isNotificacoes());
             stmt.execute();
             stmt.close();
@@ -25,6 +25,58 @@ public class TarefaDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public Tarefa buscaPorIdDAO(int id) {
+        String sql = "SELECT * FROM Tarefa WHERE idT=?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Tarefa tarefa = new Tarefa();
+                tarefa.setId(rs.getInt("idT"));
+                tarefa.setTitulo(rs.getString("titulo"));
+                tarefa.setDescricao(rs.getString("descricao"));
+                tarefa.setDataPrazo(rs.getString("dataPrazo"));
+                tarefa.setNotificacoes(rs.getBoolean("notificacoes"));
+                return tarefa;
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    public void atualizarTarefaDAO(Tarefa tarefa) {
+        String sql = "UPDATE Tarefa SET titulo=?, descricao=?, dataPrazo=?, notificacoes=? WHERE idT=?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, tarefa.getTitulo());
+            stmt.setString(2, tarefa.getDescricao());
+            stmt.setString(3, tarefa.getDataPrazo());
+            stmt.setBoolean(4, tarefa.isNotificacoes());
+            stmt.setInt(5, tarefa.getId());
+            stmt.execute();
+            stmt.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void excluirTarefaDAO(int id) {
+        String sql = "DELETE FROM Tarefa WHERE idT=?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, id);
+            stmt.execute();
+            stmt.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public ArrayList<Tarefa> listarTarefasDAO() {
         ArrayList<Tarefa> tarefas = new ArrayList<>();
@@ -34,10 +86,10 @@ public class TarefaDAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Tarefa tarefa = new Tarefa();
-                tarefa.setId(rs.getInt("id"));
-                tarefa.setNome(rs.getString("nome"));
+                tarefa.setId(rs.getInt("idT"));
+                tarefa.setTitulo(rs.getString("titulo"));
                 tarefa.setDescricao(rs.getString("descricao"));
-                tarefa.setDataPrazo(rs.getString("dataprazo"));
+                tarefa.setDataPrazo(rs.getString("dataPrazo"));
                 tarefa.setNotificacoes(rs.getBoolean("notificacoes"));
                 tarefas.add(tarefa);
             }

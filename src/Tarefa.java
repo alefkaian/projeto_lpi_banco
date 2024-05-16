@@ -1,18 +1,19 @@
 
 public class Tarefa {
     private int id;
-    private String nome;
+    private String titulo;
     private String dataPrazo;
     private String descricao;
     private boolean notificacoes;
 
-    public Tarefa(){
+    // Construtor
 
+    public Tarefa() {
     }
 
-    // Construtor
-    public Tarefa(String nome, String dataPrazo, String descricao, boolean notificacoes) {
-        this.nome = nome;
+    public Tarefa(String titulo, String descricao, String dataPrazo, boolean notificacoes) {
+        this.titulo = titulo;
+        this.dataPrazo = dataPrazo;
         this.descricao = descricao;
         this.notificacoes = notificacoes;
     }
@@ -26,12 +27,12 @@ public class Tarefa {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     public String getDataPrazo() {
@@ -60,12 +61,12 @@ public class Tarefa {
 
     @Override
     public String toString() {
-        return "Tarefa{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", dataPrazo='" + dataPrazo + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", notificacoes=" + notificacoes +
-                '}';
+        return "Tarefa(" +
+                "Id: " + this.id +
+                ", Título: " + this.titulo +
+                ", Descrição: " + this.descricao +
+                ", Prazo: " + this.dataPrazo +
+                ", Notificações: " + isNotificacoes() + ")";
+
     }
 }
