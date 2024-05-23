@@ -1,10 +1,11 @@
 
 public class Tarefa {
-    private int id;
+    private int idT;
     private String titulo;
     private String dataPrazo;
     private String descricao;
     private boolean notificacoes;
+    private int idS;
 
     // Construtor
 
@@ -19,12 +20,12 @@ public class Tarefa {
     }
 
     // Getters e Setters
-    public int getId() {
-        return id;
+    public int getIdT() {
+        return idT;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdT(int id) {
+        this.idT = id;
     }
 
     public String getTitulo() {
@@ -59,14 +60,23 @@ public class Tarefa {
         this.notificacoes = notificacoes;
     }
 
+    public int getIdS() {
+        return idS;
+    }
+
+    public void setIdS(int idS) {
+        this.idS = idS;
+    }
+
     @Override
     public String toString() {
         return "Tarefa(" +
-                "Id: " + this.id +
+                "Id: " + this.idT +
                 ", Título: " + this.titulo +
                 ", Descrição: " + this.descricao +
                 ", Prazo: " + this.dataPrazo +
-                ", Notificações: " + isNotificacoes() + ")";
+                ", Notificações: " + isNotificacoes() +
+                ", IdS: " + this.idS + ")";
 
     }
 }

@@ -26,19 +26,20 @@ public class TarefaDAO {
         }
     }
 
-    public Tarefa buscaPorIdDAO(int id) {
+    public Tarefa buscaPorIdDAO(int idT) {
         String sql = "SELECT * FROM Tarefa WHERE idT=?";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, id);
+            stmt.setInt(1, idT);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 Tarefa tarefa = new Tarefa();
-                tarefa.setId(rs.getInt("idT"));
+                tarefa.setIdT(rs.getInt("idT"));
                 tarefa.setTitulo(rs.getString("titulo"));
                 tarefa.setDescricao(rs.getString("descricao"));
                 tarefa.setDataPrazo(rs.getString("dataPrazo"));
                 tarefa.setNotificacoes(rs.getBoolean("notificacoes"));
+                tarefa.setIdS(rs.getInt("idS"));
                 return tarefa;
             }
             rs.close();
@@ -50,14 +51,21 @@ public class TarefaDAO {
     }
 
     public void atualizarTarefaDAO(Tarefa tarefa) {
-        String sql = "UPDATE Tarefa SET titulo=?, descricao=?, dataPrazo=?, notificacoes=? WHERE idT=?";
+        String sql = "UPDATE Tarefa SET titulo=?, descricao=?, dataPrazo=?, notificacoes=?, idS=? WHERE idT=?";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, tarefa.getTitulo());
             stmt.setString(2, tarefa.getDescricao());
             stmt.setString(3, tarefa.getDataPrazo());
             stmt.setBoolean(4, tarefa.isNotificacoes());
-            stmt.setInt(5, tarefa.getId());
+
+            if (tarefa.getIdS() == 0) {
+                stmt.setNull(5, java.sql.Types.INTEGER);
+            } else {
+                stmt.setInt(5, tarefa.getIdS());
+            }
+
+            stmt.setInt(6, tarefa.getIdT());
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
@@ -65,11 +73,11 @@ public class TarefaDAO {
         }
     }
 
-    public void excluirTarefaDAO(int id) {
+    public void excluirTarefaDAO(int idT) {
         String sql = "DELETE FROM Tarefa WHERE idT=?";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, id);
+            stmt.setInt(1, idT);
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
@@ -80,17 +88,18 @@ public class TarefaDAO {
 
     public ArrayList<Tarefa> listarTarefasDAO() {
         ArrayList<Tarefa> tarefas = new ArrayList<>();
-        String sql = "SELECT * FROM Tarefa";
+        String sql = "SELECT idT, titulo, descricao, dataPrazo, notificacoes, idS FROM Tarefa";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Tarefa tarefa = new Tarefa();
-                tarefa.setId(rs.getInt("idT"));
+                tarefa.setIdT(rs.getInt("idT"));
                 tarefa.setTitulo(rs.getString("titulo"));
                 tarefa.setDescricao(rs.getString("descricao"));
                 tarefa.setDataPrazo(rs.getString("dataPrazo"));
                 tarefa.setNotificacoes(rs.getBoolean("notificacoes"));
+                tarefa.setIdS(rs.getInt("idS")); // Adiciona o idS à Tarefa
                 tarefas.add(tarefa);
             }
             rs.close();
@@ -99,5 +108,18 @@ public class TarefaDAO {
             throw new RuntimeException(e);
         }
         return tarefas;
+    }
+
+    public void atribuirSupervisorTarefaDAO(int idT, int idS) {
+        String sql = "UPDATE Tarefa SET idS=? WHERE idT=?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, idS);
+            stmt.setInt(2, idT);
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
