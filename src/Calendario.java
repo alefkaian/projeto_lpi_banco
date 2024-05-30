@@ -3,8 +3,8 @@ import java.util.*;
 import java.text.ParseException;
 
 public class Calendario {
+    private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
     private Calendar c = Calendar.getInstance();
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
     private Map<Date, ArrayList<Tarefa>> calendario = new HashMap<>();
 
     public Calendario() {
@@ -39,7 +39,7 @@ public class Calendario {
         }
     }
 
-    public String calcularNovaData(int qtdDias) {
+    public static String calcularNovaData(int qtdDias) {
         Calendar cAuxiliar = Calendar.getInstance();
         cAuxiliar.add(Calendar.DAY_OF_MONTH, qtdDias);
         return sdf.format(cAuxiliar.getTime());

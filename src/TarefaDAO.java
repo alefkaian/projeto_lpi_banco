@@ -75,12 +75,20 @@ public class TarefaDAO {
     }
 
     public void excluirTarefaDAO(int idT) {
-        String sql = "DELETE FROM Tarefa WHERE idT=?";
+        String sql_membro = "UPDATE Membro SET idT = NULL WHERE idt= ?";
+        String sql_tarefa = "DELETE FROM Tarefa WHERE idT=?";
         try {
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, idT);
-            stmt.execute();
-            stmt.close();
+            try (PreparedStatement stmt = connection.prepareStatement(sql_membro)) {
+
+                stmt.setInt(1, idT);
+                stmt.execute();
+            }
+
+            try (PreparedStatement stmt = connection.prepareStatement(sql_tarefa)) {
+
+                stmt.setInt(1, idT);
+                stmt.execute();
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

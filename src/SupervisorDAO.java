@@ -64,12 +64,19 @@ public class SupervisorDAO {
     }
 
     public void excluirSupervisorDAO(int idS) {
-        String sql = "DELETE FROM Supervisor WHERE idS=?";
+        String sql_tarefa = "UPDATE Tarefa SET idS = NULL WHERE idS = ?";
+        String sql_supervisor = "DELETE FROM Supervisor WHERE idS = ?";
+
         try {
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, idS);
-            stmt.execute();
-            stmt.close();
+            try (PreparedStatement stmt = connection.prepareStatement(sql_tarefa)) {
+                stmt.setInt(1, idS);
+                stmt.execute();
+            }
+
+            try (PreparedStatement stmt = connection.prepareStatement(sql_supervisor)) {
+                stmt.setInt(1, idS);
+                stmt.execute();
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
