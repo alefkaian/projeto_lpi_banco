@@ -31,15 +31,19 @@ public class Cadastro {
         System.out.println("\nTarefa excluída com sucesso!");
     }
 
+    public ArrayList<Tarefa> getListaTarefas(){
+        return tarefaDAO.listarTarefasDAO();
+    }
+
     public void listarTarefasDetalhado() {
-        ArrayList<Tarefa> listaTarefas = tarefaDAO.listarTarefasDAO();
+        ArrayList<Tarefa> listaTarefas = getListaTarefas();
         for (Tarefa tarefa : listaTarefas) {
             System.out.println("\n" + tarefa.toString());
         }
     }
 
     public void listarTarefasSimplificado() {
-        ArrayList<Tarefa> listaTarefas = tarefaDAO.listarTarefasDAO();
+        ArrayList<Tarefa> listaTarefas = getListaTarefas();
         for (Tarefa tarefa : listaTarefas) {
             System.out.println(tarefa.getIdT() + "- " + tarefa.getTitulo());
         }
@@ -159,7 +163,6 @@ public class Cadastro {
             }
         }
     }
-
 
     public void atribuirSupervisorTarefa(int idT, int idS) {
         tarefaDAO.atribuirSupervisorTarefaDAO(idT, idS);

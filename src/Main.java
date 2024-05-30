@@ -1,18 +1,17 @@
-import java.sql.SQLOutput;
 import java.util.Locale;
 import java.util.Scanner;
-import java.util.SortedMap;
 
 public class Main {
     public static void main(String[] args) {
         int escolha_menu_principal = -1;
         Scanner input = new Scanner(System.in).useLocale(Locale.ENGLISH);
         Cadastro cadastro = new Cadastro();
+        Calendario calendario = new Calendario();
 
         while (escolha_menu_principal != 0) {
             //try {
             System.out.println("\nEscolha uma das operações:");
-            System.out.println("1- Cadastro de Pessoas\n2- Cadastro de Tarefas\n3- Atribuição de pessoas às tarefas\n0- Sair");
+            System.out.println("1- Cadastro de Pessoas\n2- Cadastro de Tarefas\n3- Atribuição de pessoas às tarefas\n4- Calendário\n0- Sair");
             escolha_menu_principal = input.nextInt();
             input.nextLine();
 
@@ -285,12 +284,13 @@ public class Main {
                                     int escolha_menu_edicao = -1;
                                     if (tarefa_escolhida != null) {
                                         while (escolha_menu_edicao != 0) {
-                                            System.out.println("\nTarefa selecionada: \n" + tarefa_escolhida.toString());
+                                            System.out.println("\nTarefa selecionada: \n" + tarefa_escolhida);
                                             System.out.println("\nAlterar \n1- Título" +
                                                     "\n2- Descrição" +
                                                     "\n3- Data" +
                                                     "\n4- Notificações" +
-                                                    "\n\n5- Confirmar alterações\n6- Excluir tarefa\n0- Voltar");
+                                                    "\n5- Definir Prioridade" +
+                                                    "\n\n6- Confirmar alterações\n7- Excluir tarefa\n0- Voltar");
                                             escolha_menu_edicao = input.nextInt();
                                             input.nextLine();
 
@@ -302,32 +302,58 @@ public class Main {
                                                     System.out.println("Título atual: " + tarefa_escolhida.getTitulo());
                                                     System.out.println("Novo título: ");
                                                     tarefa_escolhida.setTitulo(input.nextLine());
+                                                    escolha_menu_edicao = -1;
                                                     break;
 
                                                 case 2:
                                                     System.out.println("Descrição atual: " + tarefa_escolhida.getDescricao());
                                                     System.out.println("Nova descrição: ");
                                                     tarefa_escolhida.setDescricao(input.nextLine());
+                                                    escolha_menu_edicao = -1;
                                                     break;
 
                                                 case 3:
                                                     System.out.println("Prazo atual: " + tarefa_escolhida.getDataPrazo());
                                                     System.out.println("Novo prazo: ");
                                                     tarefa_escolhida.setDataPrazo(input.nextLine());
+                                                    escolha_menu_edicao = -1;
                                                     break;
 
                                                 case 4:
                                                     System.out.println("Notificações atualmente: " + tarefa_escolhida.isNotificacoes());
                                                     System.out.println("Deseja ativar as notificações? (s/n): ");
                                                     tarefa_escolhida.setNotificacoes(input.nextLine().equals("s"));
+                                                    escolha_menu_edicao = -1;
                                                     break;
 
                                                 case 5:
+                                                    System.out.println("Qual prioridade deseja definir para a tarefa?\n1- Baixa\n2- Média\n3- Alta");
+                                                    int escolha_prioridade = input.nextInt();
+                                                    input.nextLine();
+                                                    switch (escolha_prioridade) {
+                                                        case 1:
+                                                            tarefa_escolhida.alterarPrioridade(calendario, Prioridade.BAIXA);
+                                                            break;
+                                                        case 2:
+                                                            tarefa_escolhida.alterarPrioridade(calendario, Prioridade.MEDIA);
+                                                            break;
+                                                        case 3:
+                                                            tarefa_escolhida.alterarPrioridade(calendario, Prioridade.ALTA);
+                                                            break;
+                                                        default:
+                                                            System.out.println("\nEscolha inválida!");
+                                                            break;
+                                                    }
+
+                                                    escolha_menu_edicao = -1;
+                                                    break;
+
+                                                case 6:
                                                     cadastro.atualizarTarefa(tarefa_escolhida);
                                                     escolha_menu_edicao = 0;
                                                     break;
 
-                                                case 6:
+                                                case 7:
                                                     System.out.println("Deseja realmente excluir a tarefa? (s/n)");
                                                     if (input.nextLine().equals("s")) {
                                                         cadastro.excluirTarefa(tarefa_escolhida.getIdT());
@@ -337,6 +363,7 @@ public class Main {
 
                                                 default:
                                                     System.out.println("\nEscolha inválida!");
+                                                    escolha_menu_edicao = -1;
                                                     break;
                                             }
                                         }
@@ -472,6 +499,12 @@ public class Main {
                         }
 
                     }
+                    escolha_menu_principal = -1;
+                    break;
+
+
+                case 4:
+                    calendario.exibirCalendario(cadastro.getListaTarefas());
                     escolha_menu_principal = -1;
                     break;
 

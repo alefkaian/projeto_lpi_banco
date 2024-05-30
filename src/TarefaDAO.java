@@ -51,21 +51,22 @@ public class TarefaDAO {
     }
 
     public void atualizarTarefaDAO(Tarefa tarefa) {
-        String sql = "UPDATE Tarefa SET titulo=?, descricao=?, dataPrazo=?, notificacoes=?, idS=? WHERE idT=?";
+        String sql = "UPDATE Tarefa SET titulo=?, descricao=?, dataPrazo=?, notificacoes=?, prioridade=?, idS=? WHERE idT=?";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, tarefa.getTitulo());
             stmt.setString(2, tarefa.getDescricao());
             stmt.setString(3, tarefa.getDataPrazo());
             stmt.setBoolean(4, tarefa.isNotificacoes());
+            stmt.setString(5, tarefa.getPrioridade());
 
             if (tarefa.getIdS() == 0) {
-                stmt.setNull(5, java.sql.Types.INTEGER);
+                stmt.setNull(6, java.sql.Types.INTEGER);
             } else {
-                stmt.setInt(5, tarefa.getIdS());
+                stmt.setInt(6, tarefa.getIdS());
             }
 
-            stmt.setInt(6, tarefa.getIdT());
+            stmt.setInt(7, tarefa.getIdT());
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
@@ -88,7 +89,7 @@ public class TarefaDAO {
 
     public ArrayList<Tarefa> listarTarefasDAO() {
         ArrayList<Tarefa> tarefas = new ArrayList<>();
-        String sql = "SELECT idT, titulo, descricao, dataPrazo, notificacoes, idS FROM Tarefa";
+        String sql = "SELECT idT, titulo, descricao, dataPrazo, notificacoes, prioridade, idS FROM Tarefa";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
@@ -99,6 +100,7 @@ public class TarefaDAO {
                 tarefa.setDescricao(rs.getString("descricao"));
                 tarefa.setDataPrazo(rs.getString("dataPrazo"));
                 tarefa.setNotificacoes(rs.getBoolean("notificacoes"));
+                tarefa.setPrioridade(rs.getString("prioridade"));
                 tarefa.setIdS(rs.getInt("idS")); // Adiciona o idS à Tarefa
                 tarefas.add(tarefa);
             }
